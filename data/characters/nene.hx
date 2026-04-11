@@ -1,4 +1,5 @@
 import funkin.objects.stageobjects.ABotVis;
+import funkin.backend.Conductor;
 
 import animate.FlxAnimateFrames;
 import animate.FlxAnimate;
@@ -7,6 +8,7 @@ var abotSpeaker:FlxAnimate;
 var pupil:FlxAnimate;
 var abotVis:ABotVis;
 var abot:FlxSpriteGroup;
+var started = false;
 
 function onCreatePost()
 {
@@ -51,13 +53,50 @@ function onCreatePost()
 	aBot.add(abotVis);
 	
 	aBot.add(abotSpeaker);
+	
+	tempAnalyzer();
 }
 
-// function onSongStart()
-// {
-// 	abotVis.snd = audio.inst;
-// 	abotVis.initAnalyzer();
-// }
+var shit = [4, 3, 2, 0, 2, 3, 4];
+
+function tempAnalyzer()
+{
+	if (started) return;
+	
+	var fuck = -1;
+	for (i in abotVis.members)
+	{
+		fuck += 1;
+		i.visible = true;
+		i.animation.curAnim.curFrame = shit[fuck];
+	}
+	
+	shit = shiftRight(shit);
+	
+	FlxTimer.wait(0.075, tempAnalyzer);
+}
+
+function shiftRight(arr)
+{
+	if (arr.length <= 1) return arr;
+	
+	var last = arr.pop(); // remove last element
+	arr.unshift(last); // add it to the front
+	
+	return arr;
+}
+
+function onSongStart()
+{
+	started = true;
+	
+	if (ClientPrefs.streamedMusic) speakerBump();
+	else
+	{
+		abotVis.snd = audio.inst;
+		abotVis.initAnalyzer();
+	}
+}
 
 function onDestroy()
 {
@@ -74,6 +113,27 @@ var left = true;
 function onBeatHit()
 {
 	if (abotSpeaker != null) abotSpeaker.anim.play('sys', true);
+	
+	if (ClientPrefs.streamedMusic) speakerBump();
+}
+
+function speakerBump()
+{
+	final initVol = [4, 3, 1, 0, 1, 2, 3];
+	var fuck = -1;
+	for (i in abotVis.members)
+	{
+		fuck += 1;
+		final choice = initVol[fuck];
+		
+		i.animation.curAnim.curFrame = choice;
+		FlxTween.num(choice, 6, Conductor.stepCrotchet / 500,
+			{
+				onUpdate: (t) -> {
+					i.animation.curAnim.curFrame = t.value;
+				}
+			});
+	}
 }
 
 var prevSec = PlayState.SONG.notes[0];
