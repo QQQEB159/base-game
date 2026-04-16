@@ -57,7 +57,7 @@ function onCreatePost()
 	tempAnalyzer();
 }
 
-var shit = [4, 3, 2, 0, 2, 3, 4];
+var shit = [5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5];
 
 function tempAnalyzer()
 {
@@ -73,7 +73,7 @@ function tempAnalyzer()
 	
 	shit = shiftRight(shit);
 	
-	FlxTimer.wait(0.075, tempAnalyzer);
+	FlxTimer.wait(0.045, tempAnalyzer);
 }
 
 function shiftRight(arr)
@@ -95,6 +95,7 @@ function onSongStart()
 	{
 		abotVis.snd = audio.inst;
 		abotVis.initAnalyzer();
+		abotVis.analyzer.fftN = 2048;
 	}
 }
 
@@ -143,7 +144,39 @@ function onSectionHit()
 	if (pupil != null)
 	{
 		var sec = PlayState.SONG.notes[curSection];
-		if (curSection > 0) prevSec = PlayState.SONG.notes[curSection - 1];
-		if (sec.mustHitSection != prevSec.mustHitSection) pupil.anim.play('lookin ' + (sec.mustHitSection ? 'right' : 'left'));
+		
+		if (sec != null)
+		{
+			if (curSection > 0) prevSec = PlayState.SONG.notes[curSection - 1];
+			if (sec.mustHitSection != prevSec.mustHitSection) pupil.anim.play('lookin ' + (sec.mustHitSection ? 'right' : 'left'));
+		}
+	}
+}
+
+function goodNoteHit()
+{
+	if (combo == 50) gf.playAnimForDuration('combo50', 1.2, true);
+	
+	if (combo == 200) gf.playAnimForDuration('combo200', 1.2, true);
+}
+
+var readyToKill = false;
+
+function onUpdatePost()
+{
+	if (health <= 0.6 && !readyToKill)
+	{
+		gf.stunned = true;
+		readyToKill = true;
+		gf.playAnim('raiseKnife', true);
+		FlxTimer.wait(0.36, () -> {
+			gf.playAnim('idleKnife', true);
+		});
+	}
+	else if (health > 0.6 && readyToKill)
+	{
+		gf.stunned = false;
+		readyToKill = false;
+		gf.playAnimForDuration('lowerKnife', 0.3, true);
 	}
 }

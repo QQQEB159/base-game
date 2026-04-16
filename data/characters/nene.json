@@ -234,19 +234,6 @@
 			"loop": false,
 			"flipY": false,
 			"offsets": [
-				-99,
-				52
-			],
-			"anim": "idleKnife",
-			"fps": 24,
-			"name": "KnifeIdle0",
-			"indices": [],
-			"flipX": false
-		},
-		{
-			"loop": false,
-			"flipY": false,
-			"offsets": [
 				135,
 				52
 			],
@@ -359,12 +346,51 @@
 				14
 			],
 			"flipX": false
+		},
+		{
+			"offsets": [
+				-99,
+				52
+			],
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9,
+				9
+			],
+			"fps": 24,
+			"flipX": false,
+			"flipY": false,
+			"anim": "idleKnife",
+			"loop": true,
+			"name": "KnifeIdle0"
 		}
 	],
 	"no_antialiasing": false,
 	"image": "characters/Nene,characters/Nene_Hair_Blowing",
 	"position": [
-		0,
+		30,
 		0
 	],
 	"dance_every": 1,
@@ -373,6 +399,7 @@
 	"gameover_confirm_sound": null,
 	"healthicon": "face",
 	"gameover_character": null,
+	"vslice_sustains": false,
 	"flip_x": false,
 	"healthbar_colour": -8355712,
 	"camera_position": [
